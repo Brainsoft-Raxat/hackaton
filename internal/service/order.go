@@ -85,6 +85,32 @@ func (s *orderService) GetCoordinates(ctx context.Context, req data.GetCoordinat
 
 }
 
+func (s *orderService) GetClientData(ctx context.Context, req data.GetClientDataRequest) (resp data.GetClientDataResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, time.Minute)
+	defer cancel()
+
+	iinResp, err := s.orderRepo.CheckIIN(ctx, req.IIN)
+	if err != nil {
+		return
+	}
+
+	clientResp, err := s.orderRepo.GetPersonData(ctx, req.IIN)
+	if err != nil {
+		return
+	}
+
+	return data.GetClientDataResponse{
+		FirstName:  clientResp.FirstName,
+		MiddleName: clientResp.MiddleName,
+		LastName:   clientResp.LastName,
+		Phone:      iinResp.Phone,
+	}, nil
+}
+
+func (s *orderService) GetDeliveryServices(ctx context.Context) (deliveryServices []models.DeliveryServices, err error) {
+	return s.orderRepo.GetDeliveryServices(ctx)
+}
+
 func NewOrderService(repo *repository.Repository) OrderService {
 	return &orderService{
 		orderRepo: repo,

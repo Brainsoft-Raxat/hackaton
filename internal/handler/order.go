@@ -23,3 +23,31 @@ func (h *handler) CheckIIN(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, resp)
 }
+
+func (h *handler) GetClientData(c echo.Context) error {
+	var req data.GetClientDataRequest
+	err := c.Bind(&req)
+	if err != nil {
+		return handleError(c, http.StatusBadRequest, err)
+	}
+
+	req.IIN = c.Param("iin")
+
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.GetClientData(ctx, req)
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (h *handler) GetBranches(c echo.Context) error {
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.GetDeliveryServices(ctx)
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}

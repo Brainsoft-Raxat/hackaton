@@ -48,14 +48,26 @@ func (r *postgres) SaveDeliveryServices(ctx context.Context, DeliveryServices mo
 	return id, nil
 }
 
-func (r *postgres) GetDeliveryServices(ctx context.Context, id int) (DeliveryServices models.DeliveryServices, err error) {
-
-	q := `SELECT * FROM Orders WHERE id = $1 `
-	err = r.db.QueryRow(ctx, q, id).Scan(&DeliveryServices.Id, &DeliveryServices.Name)
+func (r *postgres) GetDeliveryServices(ctx context.Context) (deliveryServices []models.DeliveryServices, err error) {
+	q := `SELECT * FROM delivery_services`
+	rows, err := r.db.Query(ctx, q)
 	if err != nil {
-		return DeliveryServices, err
+		return
 	}
-	return DeliveryServices, nil
+
+	deliveryServices = make([]models.DeliveryServices, 0)
+
+	for rows.Next() {
+		item := models.DeliveryServices{}
+		err = rows.Scan(&item.Id, &item.Name)
+		if err != nil {
+			return
+		}
+
+		deliveryServices = append(deliveryServices, item)
+	}
+
+	return deliveryServices, nil
 }
 
 func (r *postgres) SaveCouriers(ctx context.Context, Couriers models.Couriers) (value int, err error) {
