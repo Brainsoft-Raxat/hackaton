@@ -8,6 +8,24 @@ type DoSomethingResponse struct {
 	Value string `json:"value"`
 }
 
+type DocumentReadyRequest struct {
+	Id    string `json:"id"`
+	IIN   string `json:"iin"`
+	Phone string `json:"phone"`
+}
+
+type DocumentReadyResponse struct {
+	Message string `json:"message"`
+}
+
+type CheckIINRequest struct {
+	IIN string `json:"iin"`
+}
+
+type CheckIINResponse struct {
+	IsExists bool `json:"is_exists"`
+}
+
 type CreateOrderRequest struct {
 	Region         string `json:"region"`
 	City           string `json:"city"`

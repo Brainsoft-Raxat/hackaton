@@ -19,8 +19,8 @@ func New(services *service.Service) Handler {
 
 func (h *handler) Register(e *echo.Echo) {
 	e.Use()
-	c := e.Group("/api/group")
+	api := e.Group("/api")
 	{
-		c.POST("/do", h.HandleSomething)
+		api.GET("/check/:iin", h.CheckIIN)
 	}
 }

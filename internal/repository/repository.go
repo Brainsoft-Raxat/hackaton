@@ -24,6 +24,8 @@ type Postgres interface {
 type Egov interface {
 	GetPersonData(ctx context.Context, iin string) (person models.Person, err error)
 	SendSMS(ctx context.Context, msg models.SendSMSRequest) (err error)
+	GetRequestData(ctx context.Context, request models.GetRequestDataRequest) (response models.GetRequestDataResponse, err error)
+	CheckIIN(ctx context.Context, iin string) (response models.CheckIINResponse, err error)
 }
 
 func New(conn conn.Conn, cfg *config.Config) *Repository {

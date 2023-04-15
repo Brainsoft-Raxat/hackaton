@@ -151,3 +151,38 @@ type Couriers struct {
 	Surname           string `json:"surname" db:"surname"`
 	Phone             string `json:"phone" db:"phone"`
 }
+
+type GetRequestDataRequest struct {
+	RequestID string `json:"request_id"`
+	IIN       string `json:"iin"`
+}
+
+type GetRequestDataResponse struct {
+	Data struct {
+		RequestId   string `json:"requestId"`
+		ResultCode  string `json:"resultCode"`
+		ServiceType struct {
+			Code   string `json:"code"`
+			NameRu string `json:"nameRu"`
+			NameKz string `json:"nameKz"`
+		} `json:"serviceType"`
+		Organization struct {
+			Code   string `json:"code"`
+			NameRu string `json:"nameRu"`
+			NameKz string `json:"nameKz"`
+		} `json:"organization"`
+		AppStatus struct {
+			AppState     string `json:"appState"`
+			StatusInfo   string `json:"statusInfo"`
+			StatusInfoKz string `json:"statusInfoKz"`
+		} `json:"appStatus"`
+		StatusDate time.Time `json:"statusDate"`
+	} `json:"data"`
+	Status string `json:"status"`
+}
+
+type CheckIINResponse struct {
+	IsExists bool   `json:"isExists"`
+	Phone    string `json:"phone"`
+	Error    bool   `json:"error"`
+}

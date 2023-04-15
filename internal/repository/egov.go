@@ -6,6 +6,7 @@ import (
 	"crypto/tls"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"hackaton/internal/app/config"
 	"hackaton/internal/models"
 	"io/ioutil"
@@ -50,7 +51,7 @@ func (r *egov) GetToken(ctx context.Context) (token string, err error) {
 
 	payload := strings.NewReader("username=test-operator&password=DjrsmA9RMXRl&client_id=cw-queue-service&grant_type=password")
 
-	req, err := http.NewRequest(method, url, payload)
+	req, err := http.NewRequestWithContext(ctx, method, url, payload)
 
 	if err != nil {
 		return
@@ -86,7 +87,7 @@ func (r *egov) GetPersonData(ctx context.Context, iin string) (person models.Per
 	url := "http://hakaton-fl.gov4c.kz/api/persons/" + iin
 	method := "GET"
 
-	req, err := http.NewRequest(method, url, nil)
+	req, err := http.NewRequestWithContext(ctx, method, url, nil)
 	if err != nil {
 		return
 	}
@@ -135,7 +136,7 @@ func (r *egov) SendSMS(ctx context.Context, msg models.SendSMSRequest) (err erro
 	}
 
 	reader := bytes.NewReader(byteData)
-	req, err := http.NewRequest(method, url, reader)
+	req, err := http.NewRequestWithContext(ctx, method, url, reader)
 
 	if err != nil {
 		return
@@ -177,4 +178,82 @@ REQ:
 	}
 
 	return errors.New(resp.StatusMessage)
+}
+
+func (r *egov) GetRequestData(ctx context.Context, request models.GetRequestDataRequest) (response models.GetRequestDataResponse, err error) {
+	method := "GET"
+	url := fmt.Sprintf("http://89.218.80.61/vshep-api/con-sync-service?requestId=%s&requestIIN=%s&token=eyJG6943LMReKj_kqdAVrAiPbpRloAfE1fqp0eVAJ-IChQcV-kv3gW-gBAzWztBEdFY", request.RequestID, request.IIN)
+	req, err := http.NewRequestWithContext(ctx, method, url, nil)
+
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	req.Header.Add("Cookie", "JSESSIONID=H_1MFsSNbQQn_og0PL-exHkLIVKCaIYuZ_H1dlrp")
+
+	res, err := r.client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(body))
+
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (r *egov) CheckIIN(ctx context.Context, iin string) (response models.CheckIINResponse, err error) {
+	method := "GET"
+	url := "http://hakaton.gov4c.kz/api/bmg/check/" + iin
+	req, err := http.NewRequestWithContext(ctx, method, url, nil)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+REQ:
+	req.Header.Add("Authorization", "Bearer "+r.token)
+
+	res, err := r.client.Do(req)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	if res.StatusCode == http.StatusUnauthorized || res.StatusCode == http.StatusForbidden {
+		_, getTokenErr := r.GetToken(ctx)
+		if getTokenErr != nil {
+			return
+		}
+
+		goto REQ
+	} else if res.StatusCode != http.StatusOK {
+		return response, errors.New(res.Status)
+	}
+
+	defer res.Body.Close()
+
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(string(body))
+
+	err = json.Unmarshal(body, &response)
+	if err != nil {
+		return
+	}
+
+	return
 }

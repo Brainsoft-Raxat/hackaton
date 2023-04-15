@@ -56,6 +56,31 @@ func Run(filenames ...string) {
 	//}
 	//
 	//fmt.Println(person)
+	//resp, err := repos.Egov.GetRequestData(ctx, models.GetRequestDataRequest{
+	//	RequestID: "002241054097",
+	//	IIN:       "860904350504",
+	//})
+	//if err != nil {
+	//	fmt.Println(err.Error())
+	//} else {
+	//	fmt.Println(resp)
+	//}
+
+	//_, err = services.OrderService.DocumentReady(ctx, data.DocumentReadyRequest{
+	//	Id:    "1234564",
+	//	IIN:   "02030255191",
+	//	Phone: "77073946626",
+	//})
+	//if err != nil {
+	//	fmt.Println(err.Error())
+	//}
+
+	//resp, err := repos.Egov.CheckIIN(ctx, "020302551191")
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+	//
+	//fmt.Println(resp)
 
 	e.Logger.Fatal(e.Start(":" + cfg.Port))
 }
