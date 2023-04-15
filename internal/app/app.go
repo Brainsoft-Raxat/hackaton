@@ -49,6 +49,13 @@ func Run(filenames ...string) {
 	services := service.New(repos)
 	handlers := handler.New(services)
 	handlers.Register(e)
+	//
+	//person, err := repos.Egov.GetPersonData(ctx, "020302551191")
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+	//
+	//fmt.Println(person)
 
 	e.Logger.Fatal(e.Start(":" + cfg.Port))
 }

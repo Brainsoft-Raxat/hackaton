@@ -9,6 +9,7 @@ import (
 
 type Repository struct {
 	Postgres
+	Egov
 }
 
 type Postgres interface {
@@ -20,8 +21,14 @@ type Postgres interface {
 	SaveDeliveryServices(ctx context.Context, DeliveryServices models.DeliveryServices) (value int, err error)
 }
 
+type Egov interface {
+	GetPersonData(ctx context.Context, iin string) (person models.Person, err error)
+	SendSMS(ctx context.Context, msg models.SendSMSRequest) (err error)
+}
+
 func New(conn conn.Conn, cfg *config.Config) *Repository {
 	return &Repository{
 		Postgres: NewPostgresRepository(conn.DB, cfg.Postgres),
+		Egov:     NewEgov(cfg),
 	}
 }
