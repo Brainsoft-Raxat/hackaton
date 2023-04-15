@@ -47,10 +47,22 @@ func (s *orderService) CheckIIN(ctx context.Context, req data.CheckIINRequest) (
 }
 
 func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequest) (resp data.CreateOrderResponse, err error) {
+	//branches := map[string]int{
+	//	"DHL":                 1,
+	//	"Pony Express":        2,
+	//	"Exline":              3,
+	//	"CDEK":                4,
+	//	"Garant Post Service": 5,
+	//	"Алем-Тат":            6,
+	//}
+
 	ctx, cancel := context.WithTimeout(ctx, time.Minute)
 	defer cancel()
 
-	response, err := s.orderRepo.GetDistance(ctx, req.Street, req.House)
+	slc := strings.Split(req.Address, ",")
+	home := strings.Split(strings.TrimSpace(slc[2]), " ")
+
+	response, err := s.orderRepo.GetDistance(ctx, home[0], home[1])
 	if err != nil {
 		return
 	}
@@ -62,6 +74,39 @@ func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequ
 	timeInMinute, err := strconv.Atoi(timeIn)
 	distanceValue := response.Rows[0].Elements[0].Distance.Value
 	price := math.Round(float64(distanceValue+50)/100) * 100
+
+	//requestDataResp, err := s.orderRepo.Egov.GetRequestData(ctx, models.GetRequestDataRequest{
+	//	RequestID: req.RequestID,
+	//	IIN:       req.IIN,
+	//})
+	//if err != nil {
+	//	return
+	//}
+
+	//s.orderRepo.Postgres.SaveOrder(ctx, models.Orders{
+	//	Iin:               req.IIN,
+	//	RequestId:         req.RequestID,
+	//	ServiceName:       requestDataResp.Data.ServiceType.NameRu,
+	//	OrganizationCode:  requestDataResp.Data.Organization.Code,
+	//	OrganizationName:  requestDataResp.Data.Organization.NameRu,
+	//	RecipientName:     req.FirstName,
+	//	RecipientSurname:  req.LastName,
+	//	RecipientPhone:    req.Phone,
+	//	Region:            strings.TrimSpace(slc[0]),
+	//	City:              strings.TrimSpace(slc[1]),
+	//	Street:            home[0],
+	//	House:             home[2],
+	//	Entrance:          "",
+	//	Floor:             "",
+	//	Corpus:            "",
+	//	Rc:                "",
+	//	AdditionalData:    req.AdditionalData,
+	//	TrustedFaceIin:    req.TrustedFaceIin,
+	//	DeliveryServiceId: branches[req.Branch],
+	//	DeliveryPrice:     int(price),
+	//	CourierId:         0,
+	//	Status:            "CREATED",
+	//})
 
 	return data.CreateOrderResponse{Price: price, Distance: distanceValue, Time: timeInMinute}, nil
 

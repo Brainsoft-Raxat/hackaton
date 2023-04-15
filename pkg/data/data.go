@@ -27,14 +27,22 @@ type CheckIINResponse struct {
 }
 
 type CreateOrderRequest struct {
-	Region         string `json:"region"`
-	City           string `json:"city"`
-	Street         string `json:"street"`
-	House          string `json:"house"`
-	Entrance       string `json:"entrance"`
-	Floor          string `json:"floor"`
-	Corpus         string `json:"corpus"`
-	Rc             string `json:"rc"`
+	RequestID  string `json:"request_id"`
+	IIN        string `json:"iin"`
+	Branch     string `json:"branch"`
+	FirstName  string `json:"first_name"`
+	LastName   string `json:"last_name"`
+	MiddleName string `json:"middle_name"`
+	Address    string `json:"address"`
+	Phone      string `json:"phone"`
+	//Region         string `json:"region"`
+	//City           string `json:"city"`
+	//Street         string `json:"street"`
+	//House          string `json:"house"`
+	//Entrance       string `json:"entrance"`
+	//Floor          string `json:"floor"`
+	//Corpus         string `json:"corpus"`
+	//Rc             string `json:"rc"`
 	AdditionalData string `json:"additional_data"`
 	TrustedFaceIin string `json:"trusted_face_iin"`
 }
