@@ -47,7 +47,7 @@ func (s *orderService) CheckIIN(ctx context.Context, req data.CheckIINRequest) (
 }
 
 func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequest) (resp data.CreateOrderResponse, err error) {
-	branches := map[string]int{
+	deliveries := map[string]int{
 		"DHL":                 1,
 		"Pony Express":        2,
 		"Exline":              3,
@@ -102,7 +102,7 @@ func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequ
 		Rc:                "",
 		AdditionalData:    req.AdditionalData,
 		TrustedFaceIin:    req.TrustedFaceIin,
-		DeliveryServiceId: branches[req.DeliveryService],
+		DeliveryServiceId: deliveries[req.DeliveryService],
 		DeliveryPrice:     int(price),
 		CourierId:         0,
 		Status:            "CREATED",

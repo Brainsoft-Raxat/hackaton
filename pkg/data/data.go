@@ -83,7 +83,7 @@ type GetCoordinatesRequest struct {
 type GetCoordinatesResponse struct {
 	Lat      float64 `json:"lat"`
 	Lng      float64 `json:"lng"`
-	Distance string  `jsonz:"distance"`
+	Distance string  `json:"distance"`
 	Time     string  `json:"time"`
 }
 
