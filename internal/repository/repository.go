@@ -4,6 +4,7 @@ import (
 	"context"
 	"hackaton/internal/app/config"
 	"hackaton/internal/app/conn"
+	"hackaton/internal/models"
 )
 
 type Repository struct {
@@ -11,7 +12,12 @@ type Repository struct {
 }
 
 type Postgres interface {
-	DoSomething(ctx context.Context, name string) (value string, err error)
+	GetOrders(ctx context.Context, id int) (Orders models.Orders, err error)
+	GetDeliveryServices(ctx context.Context, id int) (DeliveryServices models.DeliveryServices, err error)
+	GetCouriers(ctx context.Context, id int) (Courier models.Couriers, err error)
+	SaveCouriers(ctx context.Context, Couriers models.Couriers) (value int, err error)
+	SaveOrder(ctx context.Context, Order models.Orders) (value int, err error)
+	SaveDeliveryServices(ctx context.Context, DeliveryServices models.DeliveryServices) (value int, err error)
 }
 
 func New(conn conn.Conn, cfg *config.Config) *Repository {
