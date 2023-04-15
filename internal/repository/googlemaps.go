@@ -1,67 +1,88 @@
 package repository
 
 import (
+	"context"
+	"crypto/tls"
 	"encoding/json"
 	"fmt"
+	"github.com/Brainsoft-Raxat/hacknu/internal/app/config"
+	"github.com/Brainsoft-Raxat/hacknu/pkg/data"
 	"io/ioutil"
-	"math"
 	"net/http"
 	"strings"
+	"time"
 )
 
-type DistanceResponse struct {
-	Rows []struct {
-		Elements []struct {
-			Distance struct {
-				Text  string `json:"text"`
-				Value int    `json:"value"`
-			} `json:"distance"`
-			Duration struct {
-				Text  string `json:"text"`
-				Value int    `json:"value"`
-			} `json:"duration"`
-			Status string `json:"status"`
-		} `json:"elements"`
-	} `json:"rows"`
-	Status string `json:"status"`
+type google struct {
+	client *http.Client
 }
 
-func GetDistance(originCity string, originAddress string, originHouse string, destinationAddress string, destinationHouse string) (float64, error) {
+func NewGoogle(cfg *config.Config) Google {
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.TLSClientConfig = &tls.Config{InsecureSkipVerify: true} // nolint:gosec
+	httpClient := &http.Client{
+		Timeout:   60 * time.Second,
+		Transport: transport,
+	}
+	r := &google{
+		client: httpClient,
+	}
+	return r
+}
 
-	originAddress = strings.ReplaceAll(originAddress, " ", "_")
+func (r *google) GetDistance(ctx context.Context, destinationAddress string, destinationHouse string) (distanceResponse data.DistanceResponse, err error) {
+
+	originAddress := "Astana%20Kerey%20and%20Zhanibek%20Khans%204/1"
 	destinationAddress = strings.ReplaceAll(destinationAddress, " ", "_")
 
-	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=%s%s%%20%s&destinations=%s%s%%20%s&key=AIzaSyCUf6GIt3soIsxHxfGmg7jBoh8yN2A57z8", originCity, originAddress, originHouse, originCity, destinationAddress, destinationHouse)
+	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=%s&destinations=Astana%s%%20%s&key=AIzaSyCUf6GIt3soIsxHxfGmg7jBoh8yN2A57z8", originAddress, destinationAddress, destinationHouse)
 
 	method := "GET"
-
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, nil)
+	req, err := http.NewRequestWithContext(ctx, method, url, nil)
 
 	if err != nil {
 		fmt.Println(err)
-		return 0, err
+		return
 	}
-	res, err := client.Do(req)
+	res, err := r.client.Do(req)
 	if err != nil {
-		fmt.Println(err)
-		return 0, err
+		return
 	}
 	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		fmt.Println(err)
-		return 0, err
+		return
 	}
-	var distanceResponse DistanceResponse
+
 	err = json.Unmarshal([]byte(body), &distanceResponse)
 	if err != nil {
 		panic(err)
 	}
 
-	// get the distance value
-	distanceValue := distanceResponse.Rows[0].Elements[0].Distance.Value
-	price := math.Round(float64(distanceValue+50)/100) * 10
-	return price, err
+	return distanceResponse, nil
+
+}
+
+func (r *google) GetCoordinates(ctx context.Context, street string) (geocodingResponse data.GeocodingResponse, err error) {
+
+	street = strings.ReplaceAll(street, " ", "%20")
+
+	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyCUf6GIt3soIsxHxfGmg7jBoh8yN2A57z8", street)
+
+	method := "GET"
+	// Send an HTTP GET request to the API
+	resp, err := http.NewRequestWithContext(ctx, method, url, nil)
+	if err != nil {
+		return
+	}
+	defer resp.Body.Close()
+
+	// Decode the JSON response from the API
+	if err := json.NewDecoder(resp.Body).Decode(&geocodingResponse); err != nil {
+		return geocodingResponse, err
+	}
+
+	return geocodingResponse, nil
 }

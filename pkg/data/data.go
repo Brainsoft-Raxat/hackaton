@@ -40,8 +40,9 @@ type CreateOrderRequest struct {
 }
 
 type CreateOrderResponse struct {
-	Price  int    `json:"price"`
-	Branch string `json:"branch"`
+	Price    float64 `json:"price"`
+	Time     int     `json:"time"`
+	Distance int     `json:"distance"`
 }
 
 type ConfirmOrder struct {
@@ -64,4 +65,26 @@ type DistanceResponse struct {
 		} `json:"elements"`
 	} `json:"rows"`
 	Status string `json:"status"`
+}
+
+type GetCoordinatesRequest struct {
+	Street string `json:"street"`
+}
+
+type GetCoordinatesResponse struct {
+	Lat      float64 `json:"lat"`
+	Lng      float64 `json:"lng"`
+	Distance string  `json:"distance"`
+	Time     string  `json:"time"`
+}
+
+type GeocodingResponse struct {
+	Results []struct {
+		Geometry struct {
+			Location struct {
+				Lat float64 `json:"lat"`
+				Lng float64 `json:"lng"`
+			} `json:"location"`
+		} `json:"geometry"`
+	} `json:"results"`
 }

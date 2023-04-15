@@ -75,12 +75,12 @@ func Run(filenames ...string) {
 	//	fmt.Println(err.Error())
 	//}
 
-	//resp, err := repos.Egov.CheckIIN(ctx, "020302551191")
+	//long, lig, err := repos.Google.GetCoordinates("Kazakhstan, Astana, Kenesary 9")
 	//if err != nil {
 	//	fmt.Println(err)
 	//}
 	//
-	//fmt.Println(resp)
+	//fmt.Printf("Latitude: %f, Longitude: %f\n", long, lig)
 
 	e.Logger.Fatal(e.Start(":" + cfg.Port))
 }

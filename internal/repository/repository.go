@@ -5,11 +5,13 @@ import (
 	"github.com/Brainsoft-Raxat/hacknu/internal/app/config"
 	"github.com/Brainsoft-Raxat/hacknu/internal/app/conn"
 	"github.com/Brainsoft-Raxat/hacknu/internal/models"
+	"github.com/Brainsoft-Raxat/hacknu/pkg/data"
 )
 
 type Repository struct {
 	Postgres
 	Egov
+	Google
 }
 
 type Postgres interface {
@@ -28,9 +30,15 @@ type Egov interface {
 	CheckIIN(ctx context.Context, iin string) (response models.CheckIINResponse, err error)
 }
 
+type Google interface {
+	GetDistance(ctx context.Context, destinationAddress string, destinationHouse string) (distanceResponse data.DistanceResponse, err error)
+	GetCoordinates(ctx context.Context, street string) (geocodingResponse data.GeocodingResponse, err error)
+}
+
 func New(conn conn.Conn, cfg *config.Config) *Repository {
 	return &Repository{
 		Postgres: NewPostgresRepository(conn.DB, cfg.Postgres),
 		Egov:     NewEgov(cfg),
+		Google:   NewGoogle(cfg),
 	}
 }
