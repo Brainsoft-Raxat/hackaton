@@ -124,10 +124,12 @@ func (s *orderService) GetCoordinates(ctx context.Context, req data.GetCoordinat
 		return
 	}
 
-	Lat := response.Results[0].Geometry.Location.Lat
-	Lng := response.Results[0].Geometry.Location.Lng
+	if len(response.Results) != 0 {
+		resp.Lat = response.Results[0].Geometry.Location.Lat
+		resp.Lng = response.Results[0].Geometry.Location.Lng
+	}
 
-	return data.GetCoordinatesResponse{Lng: Lng, Lat: Lat}, nil
+	return
 }
 
 func (s *orderService) GetClientData(ctx context.Context, req data.GetClientDataRequest) (resp data.GetClientDataResponse, err error) {
