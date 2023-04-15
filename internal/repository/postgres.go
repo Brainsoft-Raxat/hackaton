@@ -25,11 +25,13 @@ func (r *postgres) GetOrders(ctx context.Context, id int) (Orders models.Orders,
 
 func (r *postgres) SaveOrder(ctx context.Context, Order models.Orders) (value int, err error) {
 	var id int
-	q := `insert into orders (id, iin, request_id, service_name, organization_code, organization_name, recipient_name,
+	q := `insert into orders (iin, request_id, service_name, organization_code, organization_name, recipient_name,
                     recipient_surname, recipient_phone, region, city, street, house, entrance, floor, corpus, rc,
-                    additional_data, trusted_face_iin, delivery_service_id, delivery_price, courier_id, status) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23) RETURNING id`
+                    additional_data, trusted_face_iin, delivery_service_id, delivery_price, courier_id, status)
+values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22) RETURNING id;`
 
-	err = r.db.QueryRow(ctx, q, Order.Id, Order.Iin, Order.RequestId, Order.ServiceName, Order.OrganizationCode, Order.OrganizationName, Order.RecipientName, Order.RecipientSurname, Order.RecipientPhone, Order.RecipientPhone, Order.Region, Order.City, Order.Street, Order.House, Order.Entrance, Order.Floor, Order.Corpus, Order.Rc, Order.AdditionalData, Order.TrustedFaceIin, Order.DeliveryServiceId, Order.DeliveryPrice, Order.CourierId, Order.Status).Scan(&id)
+	err = r.db.QueryRow(ctx, q, Order.Iin, Order.RequestId, Order.ServiceName, Order.OrganizationCode, Order.OrganizationName, Order.RecipientName,
+		Order.RecipientSurname, Order.RecipientPhone, Order.Region, Order.City, Order.Street, Order.House, Order.Entrance, Order.Floor, Order.Corpus, Order.Rc, Order.AdditionalData, Order.TrustedFaceIin, Order.DeliveryServiceId, Order.DeliveryPrice, Order.CourierId, Order.Status).Scan(&id)
 
 	if err != nil {
 		return 0, err

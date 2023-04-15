@@ -27,14 +27,17 @@ type CheckIINResponse struct {
 }
 
 type CreateOrderRequest struct {
-	RequestID  string `json:"request_id"`
-	IIN        string `json:"iin"`
-	Branch     string `json:"branch"`
-	FirstName  string `json:"first_name"`
-	LastName   string `json:"last_name"`
-	MiddleName string `json:"middle_name"`
-	Address    string `json:"address"`
-	Phone      string `json:"phone"`
+	RequestID       string `json:"requestId"`
+	IIN             string `json:"iin"`
+	Branch          string `json:"branch"`
+	DeliveryService string `json:"deliveryService"`
+	FirstName       string `json:"firstName"`
+	LastName        string `json:"lastName"`
+	MiddleName      string `json:"middleName"`
+	Address         string `json:"address"`
+	Phone           string `json:"phone"`
+	AdditionalData  string `json:"additionalData"`
+	TrustedFaceIin  string `json:"trustedFaceIin"`
 	//Region         string `json:"region"`
 	//City           string `json:"city"`
 	//Street         string `json:"street"`
@@ -43,8 +46,6 @@ type CreateOrderRequest struct {
 	//Floor          string `json:"floor"`
 	//Corpus         string `json:"corpus"`
 	//Rc             string `json:"rc"`
-	AdditionalData string `json:"additional_data"`
-	TrustedFaceIin string `json:"trusted_face_iin"`
 }
 
 type CreateOrderResponse struct {
@@ -82,7 +83,7 @@ type GetCoordinatesRequest struct {
 type GetCoordinatesResponse struct {
 	Lat      float64 `json:"lat"`
 	Lng      float64 `json:"lng"`
-	Distance string  `json:"distance"`
+	Distance string  `jsonz:"distance"`
 	Time     string  `json:"time"`
 }
 

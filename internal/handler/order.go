@@ -84,3 +84,20 @@ func (h *handler) GetCoordinates(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, resp)
 }
+
+func (h *handler) DocumentReady(c echo.Context) error {
+	var req data.DocumentReadyRequest
+
+	err := c.Bind(&req)
+	if err != nil {
+		return handleError(c, http.StatusBadRequest, err)
+	}
+
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.DocumentReady(ctx, req)
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
