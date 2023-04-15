@@ -67,3 +67,13 @@ func (h *handler) CreateOrder(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, resp)
 }
+
+func (h *handler) GetCoordinates(c echo.Context) error {
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.GetCoordinates(ctx, data.GetCoordinatesRequest{Street: "Kazakhstan, Astana, Kenesary 9"})
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}

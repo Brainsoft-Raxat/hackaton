@@ -75,12 +75,12 @@ func Run(filenames ...string) {
 	//	fmt.Println(err.Error())
 	//}
 
-	//long, lig, err := repos.Google.GetCoordinates("Kazakhstan, Astana, Kenesary 9")
+	//rp, err := repos.Google.GetCoordinates(ctx, "Kazakhstan, Astana, Kenesary 9")
 	//if err != nil {
 	//	fmt.Println(err)
 	//}
-	//
-	//fmt.Printf("Latitude: %f, Longitude: %f\n", long, lig)
+
+	//fmt.Printf("Latitude: %f, Longitude: %f\n", rp.Results[0].Geometry.Location.Lat, rp.Results[0].Geometry.Location.Lng)
 
 	e.Logger.Fatal(e.Start(":" + cfg.Port))
 }

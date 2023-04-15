@@ -102,8 +102,8 @@ type GetClientDataRequest struct {
 }
 
 type GetClientDataResponse struct {
-	FirstName  string `json:"first_name"`
-	MiddleName string `json:"middle_name"`
-	LastName   string `json:"last_name"`
+	FirstName  string `json:"firstName"`
+	MiddleName string `json:"middleName"`
+	LastName   string `json:"lastName"`
 	Phone      string `json:"phone"`
 }

@@ -66,21 +66,27 @@ func (r *google) GetDistance(ctx context.Context, destinationAddress string, des
 }
 
 func (r *google) GetCoordinates(ctx context.Context, street string) (geocodingResponse data.GeocodingResponse, err error) {
-
 	street = strings.ReplaceAll(street, " ", "%20")
 
 	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyCUf6GIt3soIsxHxfGmg7jBoh8yN2A57z8", street)
 
 	method := "GET"
 	// Send an HTTP GET request to the API
-	resp, err := http.NewRequestWithContext(ctx, method, url, nil)
+	httpReq, err := http.NewRequestWithContext(ctx, method, url, nil)
 	if err != nil {
 		return
 	}
+
+	resp, err := r.client.Do(httpReq)
+	if err != nil {
+		return
+	}
+
 	defer resp.Body.Close()
 
 	// Decode the JSON response from the API
-	if err := json.NewDecoder(resp.Body).Decode(&geocodingResponse); err != nil {
+	err = json.NewDecoder(resp.Body).Decode(&geocodingResponse)
+	if err != nil {
 		return geocodingResponse, err
 	}
 
