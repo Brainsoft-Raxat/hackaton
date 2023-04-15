@@ -68,7 +68,6 @@ func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequ
 }
 
 func (s *orderService) GetCoordinates(ctx context.Context, req data.GetCoordinatesRequest) (resp data.GetCoordinatesResponse, err error) {
-
 	ctx, cancel := context.WithTimeout(ctx, time.Minute)
 	defer cancel()
 
@@ -82,7 +81,6 @@ func (s *orderService) GetCoordinates(ctx context.Context, req data.GetCoordinat
 	Lng := response.Results[0].Geometry.Location.Lng
 
 	return data.GetCoordinatesResponse{Lng: Lng, Lat: Lat}, nil
-
 }
 
 func (s *orderService) GetClientData(ctx context.Context, req data.GetClientDataRequest) (resp data.GetClientDataResponse, err error) {

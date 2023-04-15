@@ -17,6 +17,7 @@ type OrderService interface {
 	GetCoordinates(ctx context.Context, req data.GetCoordinatesRequest) (resp data.GetCoordinatesResponse, err error)
 	GetClientData(ctx context.Context, req data.GetClientDataRequest) (resp data.GetClientDataResponse, err error)
 	GetDeliveryServices(ctx context.Context) (deliveryServices []models.DeliveryServices, err error)
+	CreateOrder(ctx context.Context, req data.CreateOrderRequest) (resp data.CreateOrderResponse, err error)
 }
 
 type Service struct {
