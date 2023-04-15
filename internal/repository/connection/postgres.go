@@ -2,8 +2,8 @@ package connection
 
 import (
 	"context"
+	"github.com/Brainsoft-Raxat/hacknu/internal/app/config"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"hackaton/internal/app/config"
 	"time"
 )
 

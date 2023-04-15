@@ -1,9 +1,9 @@
 package handler
 
 import (
+	"github.com/Brainsoft-Raxat/hacknu/internal/models"
+	"github.com/Brainsoft-Raxat/hacknu/pkg/data"
 	"github.com/labstack/echo/v4"
-	"hackaton/internal/models"
-	"hackaton/pkg/data"
 	"net/http"
 )
 

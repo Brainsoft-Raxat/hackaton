@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
-	"hackaton/internal/app/config"
-	"hackaton/internal/app/conn"
-	"hackaton/internal/models"
+	"github.com/Brainsoft-Raxat/hacknu/internal/app/config"
+	"github.com/Brainsoft-Raxat/hacknu/internal/app/conn"
+	"github.com/Brainsoft-Raxat/hacknu/internal/models"
 )
 
 type Repository struct {

@@ -1,8 +1,8 @@
 package handler
 
 import (
+	"github.com/Brainsoft-Raxat/hacknu/internal/service"
 	"github.com/labstack/echo/v4"
-	"hackaton/internal/service"
 )
 
 type handler struct {

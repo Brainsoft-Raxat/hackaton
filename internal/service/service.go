@@ -2,8 +2,8 @@ package service
 
 import (
 	"context"
-	"hackaton/internal/repository"
-	"hackaton/pkg/data"
+	"github.com/Brainsoft-Raxat/hacknu/internal/repository"
+	"github.com/Brainsoft-Raxat/hacknu/pkg/data"
 )
 
 type SomeService interface {

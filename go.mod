@@ -1,4 +1,4 @@
-module hackaton
+module github.com/Brainsoft-Raxat/hacknu
 
 go 1.18
 

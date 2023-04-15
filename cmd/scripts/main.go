@@ -1,6 +1,6 @@
 package main
 
-import "hackaton/internal/repository"
+import "github.com/Brainsoft-Raxat/hacknu/internal/repository"
 
 func main() {
 

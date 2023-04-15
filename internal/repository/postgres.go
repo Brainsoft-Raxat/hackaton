@@ -2,9 +2,9 @@ package repository
 
 import (
 	"context"
+	"github.com/Brainsoft-Raxat/hacknu/internal/app/config"
+	"github.com/Brainsoft-Raxat/hacknu/internal/models"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"hackaton/internal/app/config"
-	"hackaton/internal/models"
 )
 
 type postgres struct {

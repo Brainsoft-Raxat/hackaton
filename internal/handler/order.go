@@ -1,8 +1,8 @@
 package handler
 
 import (
+	"github.com/Brainsoft-Raxat/hacknu/pkg/data"
 	"github.com/labstack/echo/v4"
-	"hackaton/pkg/data"
 	"net/http"
 )
 

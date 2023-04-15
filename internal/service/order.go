@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 	"fmt"
-	"hackaton/internal/models"
-	"hackaton/internal/repository"
-	"hackaton/pkg/data"
+	"github.com/Brainsoft-Raxat/hacknu/internal/models"
+	"github.com/Brainsoft-Raxat/hacknu/internal/repository"
+	"github.com/Brainsoft-Raxat/hacknu/pkg/data"
 	"time"
 )
 

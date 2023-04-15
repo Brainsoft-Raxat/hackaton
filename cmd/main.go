@@ -1,6 +1,6 @@
 package main
 
-import "hackaton/internal/app"
+import "github.com/Brainsoft-Raxat/hacknu/internal/app"
 
 func main() {
 	app.Run()

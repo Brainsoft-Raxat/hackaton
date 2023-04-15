@@ -2,15 +2,15 @@ package app
 
 import (
 	"context"
+	"github.com/Brainsoft-Raxat/hacknu/internal/app/config"
+	"github.com/Brainsoft-Raxat/hacknu/internal/app/conn"
+	"github.com/Brainsoft-Raxat/hacknu/internal/handler"
+	"github.com/Brainsoft-Raxat/hacknu/internal/repository"
+	"github.com/Brainsoft-Raxat/hacknu/internal/repository/connection"
+	"github.com/Brainsoft-Raxat/hacknu/internal/service"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/sirupsen/logrus"
-	"hackaton/internal/app/config"
-	"hackaton/internal/app/conn"
-	"hackaton/internal/handler"
-	"hackaton/internal/repository"
-	"hackaton/internal/repository/connection"
-	"hackaton/internal/service"
 )
 
 func Run(filenames ...string) {
