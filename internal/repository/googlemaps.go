@@ -66,7 +66,17 @@ func (r *google) GetDistance(ctx context.Context, destinationAddress string, des
 }
 
 func (r *google) GetCoordinates(ctx context.Context, street string) (geocodingResponse data.GeocodingResponse, err error) {
-	street = strings.ReplaceAll(street, " ", "%20")
+	slc := strings.Split(street, ",")
+	for i, _ := range slc {
+		slc[i] = strings.TrimSpace(slc[i])
+		if i == 2 {
+			slc[i] = strings.ReplaceAll(slc[i], " ", "%20")
+		}
+	}
+
+	street = strings.Join(slc, "%20")
+
+	fmt.Println(street)
 
 	url := fmt.Sprintf("https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=AIzaSyCUf6GIt3soIsxHxfGmg7jBoh8yN2A57z8", street)
 

@@ -69,8 +69,15 @@ func (h *handler) CreateOrder(c echo.Context) error {
 }
 
 func (h *handler) GetCoordinates(c echo.Context) error {
+	var req data.GetCoordinatesRequest
+
+	err := c.Bind(&req)
+	if err != nil {
+		return handleError(c, http.StatusBadRequest, err)
+	}
+
 	ctx := c.Request().Context()
-	resp, err := h.service.OrderService.GetCoordinates(ctx, data.GetCoordinatesRequest{Street: "Kazakhstan, Astana, Kenesary 9"})
+	resp, err := h.service.OrderService.GetCoordinates(ctx, req)
 	if err != nil {
 		return handleError(c, http.StatusInternalServerError, err)
 	}
