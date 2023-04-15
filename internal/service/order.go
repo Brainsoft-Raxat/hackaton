@@ -119,6 +119,8 @@ func (s *orderService) GetCoordinates(ctx context.Context, req data.GetCoordinat
 	ctx, cancel := context.WithTimeout(ctx, time.Minute)
 	defer cancel()
 
+	fmt.Println(req.Street)
+
 	response, err := s.orderRepo.GetCoordinates(ctx, req.Street)
 	if err != nil {
 		return
