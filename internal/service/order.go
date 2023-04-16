@@ -307,11 +307,25 @@ func (s *orderService) PreFinish(ctx context.Context, request data.ConfirmOrderR
 func (s *orderService) Finish(ctx context.Context, request data.ConfirmOrderRequest) (response data.PickUpOrderFinishResponse, err error) {
 	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
 	defer cancel()
+
+	order, err := s.orderRepo.GetOrder(ctx, request.OrderId)
+	if err != nil {
+		return
+	}
+
 	err = s.orderRepo.Postgres.UpdateOrder(ctx, request.OrderId, models.FINISHED)
 	if err != nil {
 		return
 	}
 	response.Ok = true
+
+	err = s.orderRepo.Egov.SendSMS(ctx, models.SendSMSRequest{
+		Phone:   order.RecipientPhone,
+		SmsText: "Ваш заказ N" + strconv.Itoa(request.OrderId) + " завершен. Спасибо!",
+	})
+	if err != nil {
+		return
+	}
 
 	return
 }

@@ -173,7 +173,7 @@ REQ:
 		return err
 	}
 
-	if resp.Status == "200" {
+	if resp.Status == "OK" {
 		return nil
 	}
 
