@@ -76,7 +76,8 @@ func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequ
 	timeIn := strings.TrimSuffix(time, " mins") // Remove " mins" from the end of the string 	// Extract the first character of the string
 	timeInMinute, err := strconv.Atoi(timeIn)
 	distanceValue := response.Rows[0].Elements[0].Distance.Value
-	price := math.Round(float64(distanceValue+50)/100) * 100
+	//price := math.Round(float64(distanceValue+50)/100) * 100
+	price := 300 + math.Round(0.15*float64(distanceValue))
 
 	requestDataResp, err := s.orderRepo.Egov.GetRequestData(ctx, models.GetRequestDataRequest{
 		RequestID: req.RequestID,
