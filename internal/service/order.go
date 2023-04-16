@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/Brainsoft-Raxat/hacknu/internal/models"
 	"github.com/Brainsoft-Raxat/hacknu/internal/repository"
@@ -47,6 +48,8 @@ func (s *orderService) CheckIIN(ctx context.Context, req data.CheckIINRequest) (
 }
 
 func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequest) (resp data.CreateOrderResponse, err error) {
+	fmt.Println(req)
+
 	deliveries := map[string]int{
 		"DHL":                 1,
 		"Pony Express":        2,
@@ -99,7 +102,7 @@ func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequ
 		Entrance:          "",
 		Floor:             "",
 		Corpus:            "",
-		Rc:                "",
+		CourierPhone:      "",
 		AdditionalData:    req.AdditionalData,
 		TrustedFaceIin:    req.TrustedFaceIin,
 		DeliveryServiceId: deliveries[req.DeliveryService],
@@ -183,6 +186,105 @@ func (s *orderService) GetOrders(ctx context.Context, request data.GetOrdersRequ
 }
 
 func (s *orderService) PickUpOrderStart(ctx context.Context, request data.PickUpOrderStartRequest) (response data.PickUpOrderStartResponse, err error) {
+	order, err := s.orderRepo.GetOrder(ctx, request.OrderId)
+	if err != nil {
+		return
+	}
+
+	if order.Status != models.IN_PROGRESS {
+		return data.PickUpOrderStartResponse{}, errors.New("низя")
+	}
+
+	code := s.orderRepo.InMemory.SaveOTP(strconv.Itoa(order.Id))
+	fmt.Println(code)
+
+	response.Ok = true
+
+	//send sms
+	err = s.orderRepo.Egov.SendSMS(ctx, models.SendSMSRequest{
+		Phone:   request.Phone,
+		SmsText: "Ваш OTP код - " + code,
+	})
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (s *orderService) CheckOTP(ctx context.Context, request data.CheckOTPRequest) (response data.CheckOTPResponse, err error) {
+	ok := s.orderRepo.CheckOTP(request.OrderID, request.Code)
+	response.Ok = ok
+
+	return
+}
+
+func (s *orderService) PickUpOrderFinish(ctx context.Context, request data.PickUpOrderFinishRequest) (response data.PickUpOrderFinishResponse, err error) {
+	order, err := s.orderRepo.Postgres.GetOrder(ctx, request.OrderId)
+	if err != nil {
+		return
+	}
+
+	err = s.orderRepo.Postgres.UpdateOrder(ctx, request.OrderId, models.PICKUP)
+	if err != nil {
+		return
+	}
+
+	fmt.Println(order.RecipientPhone)
+	err = s.orderRepo.Egov.SendSMS(ctx, models.SendSMSRequest{
+		Phone:   order.RecipientPhone,
+		SmsText: "Ваш заказ N" + strconv.Itoa(request.OrderId) + " был вручен курьеру. Ожидайте доставки",
+	})
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (s *orderService) StartDeliver(ctx context.Context, request data.StartDeliverRequest) (response data.StartDeliverResponse, err error) {
+	err = s.orderRepo.Postgres.UpdateOrderDeliver(ctx, request.OrderId, request.Phone, request.IIN, models.IN_PROGRESS)
+	if err != nil {
+		return
+	}
+	response.Ok = true
+
+	return
+}
+
+func (s *orderService) PreFinish(ctx context.Context, request data.ConfirmOrderRequest) (response data.PickUpOrderStartResponse, err error) {
+	order, err := s.orderRepo.GetOrder(ctx, request.OrderId)
+	if err != nil {
+		return
+	}
+
+	if order.Status != models.PICKUP {
+		return data.PickUpOrderStartResponse{}, errors.New("низя")
+	}
+
+	code := s.orderRepo.InMemory.SaveOTP(strconv.Itoa(order.Id))
+	fmt.Println(code)
+
+	response.Ok = true
+
+	//send sms
+	err = s.orderRepo.Egov.SendSMS(ctx, models.SendSMSRequest{
+		Phone:   order.RecipientPhone,
+		SmsText: "Ваш OTP код - " + code,
+	})
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (s *orderService) Finish(ctx context.Context, request data.ConfirmOrderRequest) (response data.PickUpOrderFinishResponse, err error) {
+	err = s.orderRepo.Postgres.UpdateOrder(ctx, request.OrderId, models.FINISHED)
+	if err != nil {
+		return
+	}
+	response.Ok = true
 
 	return
 }

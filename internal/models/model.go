@@ -130,7 +130,7 @@ type Orders struct {
 	Entrance          string `json:"entrance" db:"entrance"`
 	Floor             string `json:"floor" db:"floor"`
 	Corpus            string `json:"corpus" db:"corpus"`
-	Rc                string `json:"rc" db:"rc"`
+	CourierPhone      string `json:"courierPhone" db:"rc"`
 	AdditionalData    string `json:"additionalData" db:"additional_data"`
 	TrustedFaceIin    string `json:"trustedFaceIin" db:"trusted_face_iin"`
 	DeliveryServiceId int    `json:"deliveryServiceId" db:"delivery_service_id"`
@@ -185,4 +185,9 @@ type CheckIINResponse struct {
 	IsExists bool   `json:"isExists"`
 	Phone    string `json:"phone"`
 	Error    bool   `json:"error"`
+}
+
+type OTP struct {
+	Code      string
+	ExpiresIn time.Time
 }

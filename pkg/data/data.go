@@ -47,7 +47,7 @@ type CreateOrderRequest struct {
 	//Entrance       string `json:"entrance"`
 	//Floor          string `json:"floor"`
 	//Corpus         string `json:"corpus"`
-	//Rc             string `json:"rc"`
+	//CourierPhone             string `json:"rc"`
 }
 
 type CreateOrderResponse struct {
@@ -134,4 +134,32 @@ type PickUpOrderStartRequest struct {
 }
 
 type PickUpOrderStartResponse struct {
+	Ok bool `json:"ok"`
+}
+
+type CheckOTPRequest struct {
+	OrderID string `json:"phone"`
+	Code    string `json:"code"`
+}
+
+type CheckOTPResponse struct {
+	Ok bool `json:"ok"`
+}
+
+type StartDeliverRequest struct {
+	OrderId int    `json:"orderId"`
+	Phone   string `json:"phone"`
+	IIN     string `json:"iin"`
+}
+
+type StartDeliverResponse struct {
+	Ok bool `json:"ok"`
+}
+
+type PickUpOrderFinishRequest struct {
+	OrderId int `json:"orderId"`
+}
+
+type PickUpOrderFinishResponse struct {
+	Ok bool `json:"ok"`
 }

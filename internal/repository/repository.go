@@ -12,6 +12,7 @@ type Repository struct {
 	Postgres
 	Egov
 	Google
+	InMemory
 }
 
 type Postgres interface {
@@ -23,6 +24,7 @@ type Postgres interface {
 	SaveDeliveryServices(ctx context.Context, DeliveryServices models.DeliveryServices) (value int, err error)
 	UpdateOrder(ctx context.Context, id int, status string) (err error)
 	GetOrders(ctx context.Context, status string) (orders []models.Orders, err error)
+	UpdateOrderDeliver(ctx context.Context, id int, phone, iin, status string) (err error)
 }
 
 type Egov interface {
@@ -37,10 +39,16 @@ type Google interface {
 	GetCoordinates(ctx context.Context, street string) (geocodingResponse data.GeocodingResponse, err error)
 }
 
+type InMemory interface {
+	SaveOTP(phone string) (code string)
+	CheckOTP(phone, code string) bool
+}
+
 func New(conn conn.Conn, cfg *config.Config) *Repository {
 	return &Repository{
 		Postgres: NewPostgresRepository(conn.DB, cfg.Postgres),
 		Egov:     NewEgov(cfg),
 		Google:   NewGoogle(cfg),
+		InMemory: NewInMemory(),
 	}
 }

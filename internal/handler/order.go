@@ -135,3 +135,88 @@ func (h *handler) ConfirmOrder(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, resp)
 }
+
+func (h *handler) PickUpOrderStart(c echo.Context) error {
+	var req data.PickUpOrderStartRequest
+
+	err := c.Bind(&req)
+	if err != nil {
+		return handleError(c, http.StatusBadRequest, err)
+	}
+
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.PickUpOrderStart(ctx, req)
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (h *handler) CheckOTP(c echo.Context) error {
+	var req data.CheckOTPRequest
+
+	err := c.Bind(&req)
+	if err != nil {
+		return handleError(c, http.StatusBadRequest, err)
+	}
+
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.CheckOTP(ctx, req)
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (h *handler) StartDeliver(c echo.Context) error {
+	var req data.StartDeliverRequest
+
+	err := c.Bind(&req)
+	if err != nil {
+		return handleError(c, http.StatusBadRequest, err)
+	}
+
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.StartDeliver(ctx, req)
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (h *handler) PreFinish(c echo.Context) error {
+	var req data.ConfirmOrderRequest
+
+	err := c.Bind(&req)
+	if err != nil {
+		return handleError(c, http.StatusBadRequest, err)
+	}
+
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.PreFinish(ctx, req)
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
+func (h *handler) Finish(c echo.Context) error {
+	var req data.ConfirmOrderRequest
+
+	err := c.Bind(&req)
+	if err != nil {
+		return handleError(c, http.StatusBadRequest, err)
+	}
+
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.Finish(ctx, req)
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}

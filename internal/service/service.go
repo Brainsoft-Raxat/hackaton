@@ -20,6 +20,11 @@ type OrderService interface {
 	CreateOrder(ctx context.Context, req data.CreateOrderRequest) (resp data.CreateOrderResponse, err error)
 	GetOrders(ctx context.Context, request data.GetOrdersRequest) (resp data.GetOrdersResponse, err error)
 	ConfirmOrder(ctx context.Context, request data.ConfirmOrderRequest) (response data.ConfirmOrderResponse, err error)
+	PickUpOrderStart(ctx context.Context, request data.PickUpOrderStartRequest) (response data.PickUpOrderStartResponse, err error)
+	CheckOTP(ctx context.Context, request data.CheckOTPRequest) (response data.CheckOTPResponse, err error)
+	StartDeliver(ctx context.Context, request data.StartDeliverRequest) (response data.StartDeliverResponse, err error)
+	PreFinish(ctx context.Context, request data.ConfirmOrderRequest) (response data.PickUpOrderStartResponse, err error)
+	Finish(ctx context.Context, request data.ConfirmOrderRequest) (response data.PickUpOrderFinishResponse, err error)
 }
 
 type Service struct {
