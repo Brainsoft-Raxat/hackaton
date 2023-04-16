@@ -185,6 +185,13 @@ func (s *orderService) GetOrders(ctx context.Context, request data.GetOrdersRequ
 	return
 }
 
+func (s *orderService) GetOrdersDeliver(ctx context.Context, request data.GetOrdersRequest) (resp data.GetOrdersResponse, err error) {
+	orders, err := s.orderRepo.Postgres.GetOrders(ctx, models.IN_PROGRESS)
+	resp.Orders = orders
+
+	return
+}
+
 func (s *orderService) PickUpOrderStart(ctx context.Context, request data.PickUpOrderStartRequest) (response data.PickUpOrderStartResponse, err error) {
 	order, err := s.orderRepo.GetOrder(ctx, request.OrderId)
 	if err != nil {

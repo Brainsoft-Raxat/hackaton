@@ -220,3 +220,20 @@ func (h *handler) Finish(c echo.Context) error {
 
 	return c.JSON(http.StatusOK, resp)
 }
+
+func (h *handler) GetOrdersDeliver(c echo.Context) error {
+	var req data.GetOrdersRequest
+
+	err := c.Bind(&req)
+	if err != nil {
+		return handleError(c, http.StatusBadRequest, err)
+	}
+
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.GetOrdersDeliver(ctx, req)
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}

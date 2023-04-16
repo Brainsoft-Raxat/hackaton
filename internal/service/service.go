@@ -25,6 +25,7 @@ type OrderService interface {
 	StartDeliver(ctx context.Context, request data.StartDeliverRequest) (response data.StartDeliverResponse, err error)
 	PreFinish(ctx context.Context, request data.ConfirmOrderRequest) (response data.PickUpOrderStartResponse, err error)
 	Finish(ctx context.Context, request data.ConfirmOrderRequest) (response data.PickUpOrderFinishResponse, err error)
+	GetOrdersDeliver(ctx context.Context, request data.GetOrdersRequest) (resp data.GetOrdersResponse, err error)
 }
 
 type Service struct {
