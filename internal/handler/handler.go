@@ -32,6 +32,7 @@ func (h *handler) Register(e *echo.Echo) {
 		api.GET("/orders/delivery", h.GetOrdersDeliver)
 		api.POST("/orders/start-deliver", h.StartDeliver)
 		api.POST("/orders/pickup", h.PickUpOrderStart)
+		api.POST("/orders/pickup-finish", h.PickUpOrderFinish)
 		api.POST("/check/otp", h.CheckOTP)
 		api.POST("/orders/pre-finish", h.PreFinish)
 		api.POST("/orders/finish", h.Finish)

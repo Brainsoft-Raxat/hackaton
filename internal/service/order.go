@@ -18,7 +18,7 @@ type orderService struct {
 }
 
 func (s *orderService) DocumentReady(ctx context.Context, req data.DocumentReadyRequest) (resp data.DocumentReadyResponse, err error) {
-	ctx, cancel := context.WithTimeout(ctx, time.Minute)
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
 	defer cancel()
 
 	msg := models.SendSMSRequest{
@@ -27,16 +27,16 @@ func (s *orderService) DocumentReady(ctx context.Context, req data.DocumentReady
 	}
 
 	fmt.Println(msg.SmsText)
-	//err = s.orderRepo.Egov.SendSMS(ctx, msg)
-	//if err != nil {
-	//	return
-	//}
+	err = s.orderRepo.Egov.SendSMS(ctx, msg)
+	if err != nil {
+		return
+	}
 
 	return
 }
 
 func (s *orderService) CheckIIN(ctx context.Context, req data.CheckIINRequest) (resp data.CheckIINResponse, err error) {
-	ctx, cancel := context.WithTimeout(ctx, time.Minute)
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
 	defer cancel()
 
 	eResp, err := s.orderRepo.CheckIIN(ctx, req.IIN)
@@ -59,7 +59,7 @@ func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequ
 		"Алем-Тат":            6,
 	}
 
-	ctx, cancel := context.WithTimeout(ctx, time.Minute)
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
 	defer cancel()
 
 	slc := strings.Split(req.Address, ",")
@@ -125,7 +125,7 @@ func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequ
 }
 
 func (s *orderService) GetCoordinates(ctx context.Context, req data.GetCoordinatesRequest) (resp data.GetCoordinatesResponse, err error) {
-	ctx, cancel := context.WithTimeout(ctx, time.Minute)
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
 	defer cancel()
 
 	fmt.Println(req.Street)
@@ -144,7 +144,7 @@ func (s *orderService) GetCoordinates(ctx context.Context, req data.GetCoordinat
 }
 
 func (s *orderService) GetClientData(ctx context.Context, req data.GetClientDataRequest) (resp data.GetClientDataResponse, err error) {
-	ctx, cancel := context.WithTimeout(ctx, time.Minute)
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
 	defer cancel()
 
 	iinResp, err := s.orderRepo.CheckIIN(ctx, req.IIN)
@@ -166,10 +166,14 @@ func (s *orderService) GetClientData(ctx context.Context, req data.GetClientData
 }
 
 func (s *orderService) GetDeliveryServices(ctx context.Context) (deliveryServices []models.DeliveryServices, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
 	return s.orderRepo.GetDeliveryServices(ctx)
 }
 
 func (s *orderService) ConfirmOrder(ctx context.Context, request data.ConfirmOrderRequest) (response data.ConfirmOrderResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
 	err = s.orderRepo.UpdateOrder(ctx, request.OrderId, models.PENDING)
 	if err != nil {
 		return
@@ -179,6 +183,8 @@ func (s *orderService) ConfirmOrder(ctx context.Context, request data.ConfirmOrd
 }
 
 func (s *orderService) GetOrders(ctx context.Context, request data.GetOrdersRequest) (resp data.GetOrdersResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
 	orders, err := s.orderRepo.Postgres.GetOrders(ctx, models.PENDING)
 	resp.Orders = orders
 
@@ -186,6 +192,8 @@ func (s *orderService) GetOrders(ctx context.Context, request data.GetOrdersRequ
 }
 
 func (s *orderService) GetOrdersDeliver(ctx context.Context, request data.GetOrdersRequest) (resp data.GetOrdersResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
 	orders, err := s.orderRepo.Postgres.GetOrders(ctx, models.IN_PROGRESS)
 	resp.Orders = orders
 
@@ -193,6 +201,8 @@ func (s *orderService) GetOrdersDeliver(ctx context.Context, request data.GetOrd
 }
 
 func (s *orderService) PickUpOrderStart(ctx context.Context, request data.PickUpOrderStartRequest) (response data.PickUpOrderStartResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
 	order, err := s.orderRepo.GetOrder(ctx, request.OrderId)
 	if err != nil {
 		return
@@ -220,6 +230,8 @@ func (s *orderService) PickUpOrderStart(ctx context.Context, request data.PickUp
 }
 
 func (s *orderService) CheckOTP(ctx context.Context, request data.CheckOTPRequest) (response data.CheckOTPResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
 	ok := s.orderRepo.CheckOTP(request.OrderID, request.Code)
 	response.Ok = ok
 
@@ -227,6 +239,8 @@ func (s *orderService) CheckOTP(ctx context.Context, request data.CheckOTPReques
 }
 
 func (s *orderService) PickUpOrderFinish(ctx context.Context, request data.PickUpOrderFinishRequest) (response data.PickUpOrderFinishResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
 	order, err := s.orderRepo.Postgres.GetOrder(ctx, request.OrderId)
 	if err != nil {
 		return
@@ -250,6 +264,8 @@ func (s *orderService) PickUpOrderFinish(ctx context.Context, request data.PickU
 }
 
 func (s *orderService) StartDeliver(ctx context.Context, request data.StartDeliverRequest) (response data.StartDeliverResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
 	err = s.orderRepo.Postgres.UpdateOrderDeliver(ctx, request.OrderId, request.Phone, request.IIN, models.IN_PROGRESS)
 	if err != nil {
 		return
@@ -260,6 +276,8 @@ func (s *orderService) StartDeliver(ctx context.Context, request data.StartDeliv
 }
 
 func (s *orderService) PreFinish(ctx context.Context, request data.ConfirmOrderRequest) (response data.PickUpOrderStartResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
 	order, err := s.orderRepo.GetOrder(ctx, request.OrderId)
 	if err != nil {
 		return
@@ -287,6 +305,8 @@ func (s *orderService) PreFinish(ctx context.Context, request data.ConfirmOrderR
 }
 
 func (s *orderService) Finish(ctx context.Context, request data.ConfirmOrderRequest) (response data.PickUpOrderFinishResponse, err error) {
+	ctx, cancel := context.WithTimeout(ctx, 20*time.Second)
+	defer cancel()
 	err = s.orderRepo.Postgres.UpdateOrder(ctx, request.OrderId, models.FINISHED)
 	if err != nil {
 		return

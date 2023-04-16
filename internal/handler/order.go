@@ -153,6 +153,23 @@ func (h *handler) PickUpOrderStart(c echo.Context) error {
 	return c.JSON(http.StatusOK, resp)
 }
 
+func (h *handler) PickUpOrderFinish(c echo.Context) error {
+	var req data.PickUpOrderFinishRequest
+
+	err := c.Bind(&req)
+	if err != nil {
+		return handleError(c, http.StatusBadRequest, err)
+	}
+
+	ctx := c.Request().Context()
+	resp, err := h.service.OrderService.PickUpOrderFinish(ctx, req)
+	if err != nil {
+		return handleError(c, http.StatusInternalServerError, err)
+	}
+
+	return c.JSON(http.StatusOK, resp)
+}
+
 func (h *handler) CheckOTP(c echo.Context) error {
 	var req data.CheckOTPRequest
 
