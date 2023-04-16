@@ -65,6 +65,8 @@ func Run(filenames ...string) {
 	//} else {
 	//	fmt.Println(resp)
 	//}
+	//
+	//os.Exit(1)
 
 	//_, err = services.OrderService.DocumentReady(ctx, data.DocumentReadyRequest{
 	//	Id:    "1234564",

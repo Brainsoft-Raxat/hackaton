@@ -1,5 +1,7 @@
 package data
 
+import "github.com/Brainsoft-Raxat/hacknu/internal/models"
+
 type DoSomethingRequest struct {
 	Name string `json:"name"`
 }
@@ -49,9 +51,11 @@ type CreateOrderRequest struct {
 }
 
 type CreateOrderResponse struct {
-	Price    float64 `json:"price"`
-	Time     int     `json:"time"`
-	Distance int     `json:"distance"`
+	OrderId    int     `json:"orderId"`
+	BranchName string  `json:"branchName"`
+	Price      float64 `json:"price"`
+	Time       int     `json:"time"`
+	Distance   int     `json:"distance"`
 }
 
 type ConfirmOrder struct {
@@ -107,4 +111,18 @@ type GetClientDataResponse struct {
 	MiddleName string `json:"middleName"`
 	LastName   string `json:"lastName"`
 	Phone      string `json:"phone"`
+}
+
+type ConfirmOrderRequest struct {
+	OrderId int `json:"orderId"`
+}
+
+type ConfirmOrderResponse struct {
+}
+
+type GetOrdersRequest struct {
+}
+
+type GetOrdersResponse struct {
+	Orders []models.Orders `json:"orders"`
 }

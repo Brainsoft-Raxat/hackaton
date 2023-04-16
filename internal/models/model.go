@@ -116,13 +116,13 @@ type SendSMSResponse struct {
 type Orders struct {
 	Id                int    `json:"id" db:"id"`
 	Iin               string `json:"iin" db:"iin"`
-	RequestId         string `json:"request_id" db:"request_id"`
-	ServiceName       string `json:"service_name" db:"service_name"`
-	OrganizationCode  string `json:"organization_code" db:"organization_code"`
-	OrganizationName  string `json:"organization_name" db:"organization_name"`
-	RecipientName     string `json:"recipient_name" db:"recipient_name"`
-	RecipientSurname  string `json:"recipient_surname" db:"recipient_surname"`
-	RecipientPhone    string `json:"recipient_phone" db:"recipient_phone"`
+	RequestId         string `json:"requestId" db:"request_id"`
+	ServiceName       string `json:"serviceName" db:"service_name"`
+	OrganizationCode  string `json:"organizationCode" db:"organization_code"`
+	OrganizationName  string `json:"organizationName" db:"organization_name"`
+	RecipientName     string `json:"recipientName" db:"recipient_name"`
+	RecipientSurname  string `json:"recipientSurname" db:"recipient_surname"`
+	RecipientPhone    string `json:"recipientPhone" db:"recipient_phone"`
 	Region            string `json:"region" db:"region"`
 	City              string `json:"city" db:"city"`
 	Street            string `json:"street" db:"street"`
@@ -131,11 +131,11 @@ type Orders struct {
 	Floor             string `json:"floor" db:"floor"`
 	Corpus            string `json:"corpus" db:"corpus"`
 	Rc                string `json:"rc" db:"rc"`
-	AdditionalData    string `json:"additional_data" db:"additional_data"`
-	TrustedFaceIin    string `json:"trusted_face_iin" db:"trusted_face_iin"`
-	DeliveryServiceId int    `json:"delivery_service_id" db:"delivery_service_id"`
-	DeliveryPrice     int    `json:"delivery_price" db:"delivery_price"`
-	CourierId         int    `json:"courier_id" db:"courier_id"`
+	AdditionalData    string `json:"additionalData" db:"additional_data"`
+	TrustedFaceIin    string `json:"trustedFaceIin" db:"trusted_face_iin"`
+	DeliveryServiceId int    `json:"deliveryServiceId" db:"delivery_service_id"`
+	DeliveryPrice     int    `json:"deliveryPrice" db:"delivery_price"`
+	CourierId         int    `json:"courierId" db:"courier_id"`
 	Status            string `json:"status" db:"status"`
 }
 

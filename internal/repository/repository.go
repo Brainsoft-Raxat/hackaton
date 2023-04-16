@@ -15,12 +15,14 @@ type Repository struct {
 }
 
 type Postgres interface {
-	GetOrders(ctx context.Context, id int) (Orders models.Orders, err error)
+	GetOrder(ctx context.Context, id int) (Orders models.Orders, err error)
 	GetDeliveryServices(ctx context.Context) (deliveryServices []models.DeliveryServices, err error)
 	GetCouriers(ctx context.Context, id int) (Courier models.Couriers, err error)
 	SaveCouriers(ctx context.Context, Couriers models.Couriers) (value int, err error)
 	SaveOrder(ctx context.Context, Order models.Orders) (value int, err error)
 	SaveDeliveryServices(ctx context.Context, DeliveryServices models.DeliveryServices) (value int, err error)
+	UpdateOrder(ctx context.Context, id int, status string) (err error)
+	GetOrders(ctx context.Context, status string) (orders []models.Orders, err error)
 }
 
 type Egov interface {

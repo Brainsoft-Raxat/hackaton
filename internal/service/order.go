@@ -77,13 +77,13 @@ func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequ
 
 	requestDataResp, err := s.orderRepo.Egov.GetRequestData(ctx, models.GetRequestDataRequest{
 		RequestID: req.RequestID,
-		IIN:       req.IIN,
+		IIN:       "860904350504",
 	})
 	if err != nil {
 		return
 	}
 
-	_, err = s.orderRepo.Postgres.SaveOrder(ctx, models.Orders{
+	orderId, err := s.orderRepo.Postgres.SaveOrder(ctx, models.Orders{
 		Iin:               req.IIN,
 		RequestId:         req.RequestID,
 		ServiceName:       requestDataResp.Data.ServiceType.NameRu,
@@ -111,7 +111,13 @@ func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequ
 		return
 	}
 
-	return data.CreateOrderResponse{Price: price, Distance: distanceValue, Time: timeInMinute}, nil
+	return data.CreateOrderResponse{
+		OrderId:    orderId,
+		BranchName: "ЦОН ул.Керей, Жанибек хандар 4, Астана",
+		Price:      price,
+		Time:       timeInMinute,
+		Distance:   distanceValue,
+	}, nil
 
 }
 
@@ -158,6 +164,22 @@ func (s *orderService) GetClientData(ctx context.Context, req data.GetClientData
 
 func (s *orderService) GetDeliveryServices(ctx context.Context) (deliveryServices []models.DeliveryServices, err error) {
 	return s.orderRepo.GetDeliveryServices(ctx)
+}
+
+func (s *orderService) ConfirmOrder(ctx context.Context, request data.ConfirmOrderRequest) (response data.ConfirmOrderResponse, err error) {
+	err = s.orderRepo.UpdateOrder(ctx, request.OrderId, models.PENDING)
+	if err != nil {
+		return
+	}
+
+	return
+}
+
+func (s *orderService) GetOrders(ctx context.Context, request data.GetOrdersRequest) (resp data.GetOrdersResponse, err error) {
+	orders, err := s.orderRepo.Postgres.GetOrders(ctx, models.PENDING)
+	resp.Orders = orders
+
+	return
 }
 
 func NewOrderService(repo *repository.Repository) OrderService {

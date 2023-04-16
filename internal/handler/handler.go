@@ -27,5 +27,7 @@ func (h *handler) Register(e *echo.Echo) {
 		api.POST("/orders/create", h.CreateOrder)
 		api.POST("/coordinates", h.GetCoordinates)
 		api.POST("/document", h.DocumentReady)
+		api.POST("/orders/confirm", h.ConfirmOrder)
+		api.GET("/orders", h.GetOrders)
 	}
 }

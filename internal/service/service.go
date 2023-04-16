@@ -18,6 +18,8 @@ type OrderService interface {
 	GetClientData(ctx context.Context, req data.GetClientDataRequest) (resp data.GetClientDataResponse, err error)
 	GetDeliveryServices(ctx context.Context) (deliveryServices []models.DeliveryServices, err error)
 	CreateOrder(ctx context.Context, req data.CreateOrderRequest) (resp data.CreateOrderResponse, err error)
+	GetOrders(ctx context.Context, request data.GetOrdersRequest) (resp data.GetOrdersResponse, err error)
+	ConfirmOrder(ctx context.Context, request data.ConfirmOrderRequest) (response data.ConfirmOrderResponse, err error)
 }
 
 type Service struct {
