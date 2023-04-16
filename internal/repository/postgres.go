@@ -16,7 +16,7 @@ type postgres struct {
 func (r *postgres) GetOrder(ctx context.Context, id int) (Orders models.Orders, err error) {
 
 	q := `SELECT * FROM Orders WHERE id = $1 `
-	err = r.db.QueryRow(ctx, q, id).Scan(&Orders.Id, &Orders.Iin, &Orders.RequestId, &Orders.ServiceName, &Orders.OrganizationCode, &Orders.OrganizationName, &Orders.RecipientName, &Orders.RecipientSurname, &Orders.RecipientPhone, &Orders.RecipientPhone, &Orders.Region, &Orders.City, &Orders.Street, &Orders.House, &Orders.Entrance, &Orders.Floor, &Orders.Corpus, &Orders.Rc, &Orders.AdditionalData, &Orders.TrustedFaceIin, &Orders.DeliveryServiceId, &Orders.DeliveryPrice, &Orders.CourierId, &Orders.Status)
+	err = r.db.QueryRow(ctx, q, id).Scan(&Orders.Id, &Orders.Iin, &Orders.RequestId, &Orders.ServiceName, &Orders.OrganizationCode, &Orders.OrganizationName, &Orders.RecipientName, &Orders.RecipientSurname, &Orders.RecipientPhone, &Orders.RecipientPhone, &Orders.Region, &Orders.City, &Orders.Street, &Orders.House, &Orders.Entrance, &Orders.Floor, &Orders.Corpus, &Orders.Rc, &Orders.AdditionalData, &Orders.TrustedFaceIin, &Orders.DeliveryServiceId, &Orders.DeliveryPrice, &Orders.CourierIIN, &Orders.Status)
 	if err != nil {
 		return Orders, err
 	}
@@ -35,7 +35,7 @@ func (r *postgres) GetOrders(ctx context.Context, status string) (orders []model
 	for rows.Next() {
 		row := models.Orders{}
 
-		err = rows.Scan(&row.Id, &row.Iin, &row.RequestId, &row.ServiceName, &row.OrganizationCode, &row.OrganizationName, &row.RecipientName, &row.RecipientSurname, &row.RecipientPhone, &row.Region, &row.City, &row.Street, &row.House, &row.Entrance, &row.Floor, &row.Corpus, &row.Rc, &row.AdditionalData, &row.TrustedFaceIin, &row.DeliveryServiceId, &row.DeliveryPrice, &row.CourierId, &row.Status)
+		err = rows.Scan(&row.Id, &row.Iin, &row.RequestId, &row.ServiceName, &row.OrganizationCode, &row.OrganizationName, &row.RecipientName, &row.RecipientSurname, &row.RecipientPhone, &row.Region, &row.City, &row.Street, &row.House, &row.Entrance, &row.Floor, &row.Corpus, &row.Rc, &row.AdditionalData, &row.TrustedFaceIin, &row.DeliveryServiceId, &row.DeliveryPrice, &row.CourierIIN, &row.Status)
 		if err != nil {
 			return
 		}
@@ -46,15 +46,15 @@ func (r *postgres) GetOrders(ctx context.Context, status string) (orders []model
 	return
 }
 
-func (r *postgres) SaveOrder(ctx context.Context, Order models.Orders) (value int, err error) {
+func (r *postgres) SaveOrder(ctx context.Context, order models.Orders) (value int, err error) {
 	var id int
 	q := `insert into orders (iin, request_id, service_name, organization_code, organization_name, recipient_name,
                     recipient_surname, recipient_phone, region, city, street, house, entrance, floor, corpus, rc,
-                    additional_data, trusted_face_iin, delivery_service_id, delivery_price, courier_id, status)
+                    additional_data, trusted_face_iin, delivery_service_id, delivery_price, courier_iin, status)
 values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22) RETURNING id;`
 
-	err = r.db.QueryRow(ctx, q, Order.Iin, Order.RequestId, Order.ServiceName, Order.OrganizationCode, Order.OrganizationName, Order.RecipientName,
-		Order.RecipientSurname, Order.RecipientPhone, Order.Region, Order.City, Order.Street, Order.House, Order.Entrance, Order.Floor, Order.Corpus, Order.Rc, Order.AdditionalData, Order.TrustedFaceIin, Order.DeliveryServiceId, Order.DeliveryPrice, Order.CourierId, Order.Status).Scan(&id)
+	err = r.db.QueryRow(ctx, q, order.Iin, order.RequestId, order.ServiceName, order.OrganizationCode, order.OrganizationName, order.RecipientName,
+		order.RecipientSurname, order.RecipientPhone, order.Region, order.City, order.Street, order.House, order.Entrance, order.Floor, order.Corpus, order.Rc, order.AdditionalData, order.TrustedFaceIin, order.DeliveryServiceId, order.DeliveryPrice, order.CourierIIN, order.Status).Scan(&id)
 
 	if err != nil {
 		return 0, err

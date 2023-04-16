@@ -135,7 +135,7 @@ type Orders struct {
 	TrustedFaceIin    string `json:"trustedFaceIin" db:"trusted_face_iin"`
 	DeliveryServiceId int    `json:"deliveryServiceId" db:"delivery_service_id"`
 	DeliveryPrice     int    `json:"deliveryPrice" db:"delivery_price"`
-	CourierId         int    `json:"courierId" db:"courier_id"`
+	CourierIIN        string `json:"courierIin" db:"courier_iin"`
 	Status            string `json:"status" db:"status"`
 }
 

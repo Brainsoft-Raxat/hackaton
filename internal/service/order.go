@@ -104,7 +104,7 @@ func (s *orderService) CreateOrder(ctx context.Context, req data.CreateOrderRequ
 		TrustedFaceIin:    req.TrustedFaceIin,
 		DeliveryServiceId: deliveries[req.DeliveryService],
 		DeliveryPrice:     int(price),
-		CourierId:         0,
+		CourierIIN:        "",
 		Status:            "CREATED",
 	})
 	if err != nil {
@@ -178,6 +178,11 @@ func (s *orderService) ConfirmOrder(ctx context.Context, request data.ConfirmOrd
 func (s *orderService) GetOrders(ctx context.Context, request data.GetOrdersRequest) (resp data.GetOrdersResponse, err error) {
 	orders, err := s.orderRepo.Postgres.GetOrders(ctx, models.PENDING)
 	resp.Orders = orders
+
+	return
+}
+
+func (s *orderService) PickUpOrderStart(ctx context.Context, request data.PickUpOrderStartRequest) (response data.PickUpOrderStartResponse, err error) {
 
 	return
 }

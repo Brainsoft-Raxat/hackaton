@@ -126,3 +126,12 @@ type GetOrdersRequest struct {
 type GetOrdersResponse struct {
 	Orders []models.Orders `json:"orders"`
 }
+
+type PickUpOrderStartRequest struct {
+	OrderId int    `json:"orderId"`
+	Phone   string `json:"phone"`
+	IIN     string `json:"iin"`
+}
+
+type PickUpOrderStartResponse struct {
+}
